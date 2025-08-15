@@ -85,8 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const weaponSlot = slots.slice(3).find(s => s > 0) || '-';
         const armorSlots = slots.slice(0, 3).filter(s => s > 0).join('-') || '-';
         return `<div class="list-group slots-group">
-            <img src="/greatsword.png" alt="Weapon Slot Icon"> ${weaponSlot}
-            <img src="/head.png" alt="Armor Slot Icon"> ${armorSlots}
+            <img src="greatsword.png" alt="Weapon Slot Icon"> ${weaponSlot}
+            <img src="head.png" alt="Armor Slot Icon"> ${armorSlots}
         </div>`;
     };
     const createDisplayHTML = (charm) => `
@@ -110,8 +110,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         return `${skillInputsHTML}
             <div class="search-group slots-group">
-                <img src="/greatsword.png" alt="Weapon Slot Icon"> <select data-type="weapon-slots">${weaponOptions}</select>
-                <img src="/head.png" alt="Armor Slot Icon"> <select data-type="armor-slots">${armorOptions}</select>
+                <img src="greatsword.png" alt="Weapon Slot Icon"> <select data-type="weapon-slots">${weaponOptions}</select>
+                <img src="head.png" alt="Armor Slot Icon"> <select data-type="armor-slots">${armorOptions}</select>
             </div>
             <div class="list-group actions-group">
                 <button data-action="save" data-id="${charm.id}">Save</button>
@@ -129,9 +129,9 @@ document.addEventListener('DOMContentLoaded', () => {
             ${createSkillEditGroupHTML('search-2', '', 0, '스킬 2...')}
             ${createSkillEditGroupHTML('search-3', '', 0, '스킬 3...')}
             <div class="search-group slots-group">
-                <img src="/greatsword.png" alt="Weapon Slot Icon">
+                <img src="greatsword.png" alt="Weapon Slot Icon">
                 <select id="search-weapon-slots">${weaponOptions}</select>
-                <img src="/head.png" alt="Armor Slot Icon">
+                <img src="head.png" alt="Armor Slot Icon">
                 <select id="search-armor-slots">${armorOptions}</select>
             </div>
             <div class="list-group actions-group">
