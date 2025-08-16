@@ -4,16 +4,137 @@ document.addEventListener('DOMContentLoaded', () => {
     // I. MASTER DATA & CONSTANTS
     // ===================================================================
     const SKILL_DATA = {
-        "공격": { maxLevel: 3 }, "간파": { maxLevel: 3 }, "납도술": { maxLevel: 3 },
-        "체력회복": { maxLevel: 3 }, "슈퍼회심": { maxLevel: 1 }, "약점특효": { maxLevel: 1 },
-        "가드 성능": { maxLevel: 2 }, "공격적인 방어": { maxLevel: 1 }, "숫돌 사용 고속화": { maxLevel: 1 },
+        "": { maxLevel: 0 },
+        "악취 내성": { maxLevel: 2 },
+        "아이템 사용 강화": { maxLevel: 3 },
+        "위협": { maxLevel: 3 },
+        "동반자 지휘": { maxLevel: 5 },
+        "회심격【특수】": { maxLevel: 3 },
+        "번개속성 공격 강화": { maxLevel: 3 },
+        "완충": { maxLevel: 1 },
+        "회심격【속성】": { maxLevel: 3 },
+        "관통탄/용화살 강화": { maxLevel: 1 },
+        "회복 속도": { maxLevel: 3 },
+        "회피 거리 UP": { maxLevel: 3 },
+        "재난대처능력": { maxLevel: 5 },
+        "회피 장전": { maxLevel: 1 },
+        "번개 내성": { maxLevel: 3 },
+        "환경 이용 지식": { maxLevel: 3 },
+        "환경 적응": { maxLevel: 2 },
+        "회피 성능": { maxLevel: 5 },
+        "가드 성능": { maxLevel: 3 },
+        "가드 강화": { maxLevel: 3 },
+        "기절 내성": { maxLevel: 3 },
+        "강화 지속": { maxLevel: 3 },
+        "급습": { maxLevel: 3 },
+        "버섯 애호가": { maxLevel: 3 },
+        "역습": { maxLevel: 3 },
+        "클라이머": { maxLevel: 1 },
+        "연찬": { maxLevel: 1 },
+        "KO술": { maxLevel: 3 },
+        "멸기병 추가": { maxLevel: 1 },
+        "속박 내성": { maxLevel: 3 },
+        "얼음속성 공격 강화": { maxLevel: 3 },
+        "곤충박사": { maxLevel: 1 },
+        "공세": { maxLevel: 5 },
+        "얼음 내성": { maxLevel: 3 },
+        "광역화": { maxLevel: 5 },
+        "혼신": { maxLevel: 3 },
+        "공격": { maxLevel: 7 },
+        "고속 변형": { maxLevel: 3 },
+        "교격": { maxLevel: 5 },
+        "칼날 연마": { maxLevel: 3 },
+        "전화위복": { maxLevel: 3 },
+        "산탄/강사 강화": { maxLevel: 1 },
+        "앙심": { maxLevel: 5 },
+        "쇄인자격": { maxLevel: 5 },
+        "식생학": { maxLevel: 4 },
+        "집중": { maxLevel: 3 },
+        "심안": { maxLevel: 3 },
+        "약점 특효": { maxLevel: 5 },
+        "점프 철인": { maxLevel: 1 },
+        "스태미나 급속 회복": { maxLevel: 3 },
+        "수면 내성": { maxLevel: 3 },
+        "스태미나 탈취": { maxLevel: 3 },
+        "수면속성 강화": { maxLevel: 3 },
+        "수면병 추가": { maxLevel: 1 },
+        "공격적인 방어": { maxLevel: 3 },
+        "정령의 가호": { maxLevel: 3 },
+        "섬광 강화": { maxLevel: 1 },
+        "정비": { maxLevel: 5 },
+        "속사 강화": { maxLevel: 1 },
+        "속성 변환": { maxLevel: 3 },
+        "속성 피해 내성": { maxLevel: 3 },
+        "속성 흡수": { maxLevel: 3 },
+        "장인": { maxLevel: 5 },
+        "달인의 재주": { maxLevel: 1 },
+        "모으기 타격 강화": { maxLevel: 1 },
+        "체술": { maxLevel: 5 },
+        "체력 회복량 UP": { maxLevel: 3 },
+        "내진": { maxLevel: 3 },
+        "탄도 강화": { maxLevel: 3 },
+        "슈퍼회심": { maxLevel: 5 },
+        "차지 마스터": { maxLevel: 3 },
+        "지질학": { maxLevel: 3 },
+        "힘의 해방": { maxLevel: 5 },
+        "도전자": { maxLevel: 5 },
+        "통상탄/통상화살 강화": { maxLevel: 1 },
+        "특수 사격 강화": { maxLevel: 2 },
+        "뛰어들기": { maxLevel: 1 },
+        "숫돌 사용 고속화": { maxLevel: 2 },
+        "독 내성": { maxLevel: 3 },
+        "둔기 사용": { maxLevel: 3 },
+        "독 대미지 강화": { maxLevel: 1 },
+        "독병 추가": { maxLevel: 1 },
+        "독속성 강화": { maxLevel: 3 },
+        "납도술": { maxLevel: 3 },
+        "배고픔 내성": { maxLevel: 3 },
+        "빨리 먹기": { maxLevel: 3 },
+        "헌터 생활": { maxLevel: 1 },
+        "파괴왕": { maxLevel: 3 },
+        "폭파병 추가": { maxLevel: 1 },
+        "발도술【기】": { maxLevel: 3 },
+        "발도술【힘】": { maxLevel: 3 },
+        "폭파속성 강화": { maxLevel: 3 },
+        "폭파 피해 내성": { maxLevel: 3 },
+        "불속성 공격 강화": { maxLevel: 3 },
+        "불 내성": { maxLevel: 3 },
+        "비연": { maxLevel: 1 },
+        "움찔 감소": { maxLevel: 3 },
+        "포스샷": { maxLevel: 3 },
+        "퍼스트샷": { maxLevel: 3 },
+        "풍압 내성": { maxLevel: 3 },
+        "완전 충전": { maxLevel: 5 },
+        "피리 명인": { maxLevel: 2 },
+        "포탄 장전": { maxLevel: 2 },
+        "포술": { maxLevel: 3 },
+        "방어력 DOWN 내성": { maxLevel: 3 },
+        "방어": { maxLevel: 7 },
+        "보머": { maxLevel: 3 },
+        "마비병 추가": { maxLevel: 1 },
+        "만족감": { maxLevel: 3 },
+        "마비 내성": { maxLevel: 3 },
+        "마비속성 강화": { maxLevel: 3 },
+        "물가/기름 진흙 적응": { maxLevel: 2 },
+        "물 내성": { maxLevel: 3 },
+        "귀마개": { maxLevel: 3 },
+        "간파": { maxLevel: 5 },
+        "물속성 공격 강화": { maxLevel: 3 },
+        "무아지경": { maxLevel: 3 },
+        "런너": { maxLevel: 3 },
+        "용 내성": { maxLevel: 3 },
+        "용속성 공격 강화": { maxLevel: 3 },
+        "열상 내성": { maxLevel: 3 },
+        "연격": { maxLevel: 5 },
+        "명검": { maxLevel: 3 }
     };
     const ALL_SKILLS = Object.keys(SKILL_DATA).sort();
+
     let charmsData = [];
     
     // NEW: State variables for filter controls
-    let isAutoFilterEnabled = true;
-    let areSlotsIncludedInFilter = true;
+    let isAutoFilterEnabled = false;
+    let areSlotsIncludedInFilter = false;
     
     // UI Element References
     const searchContainer = document.getElementById('search');
@@ -55,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
     /** Main function to render the list. It re-filters the data every time. */
     const renderList = () => {
         const filteredCharms = getFilteredCharms();
-        
+        console.log(filteredCharms)
         // NEW: Create a reversed copy for LIFO (stack) display order.
         // The original charmsData array is NOT mutated.
         const charmsToDisplay = [...filteredCharms].reverse();
@@ -93,8 +214,8 @@ document.addEventListener('DOMContentLoaded', () => {
         ${charm.skills.map(createSkillHTML).join('')}
         ${createSlotsHTML(charm.slots)}
         <div class="list-group actions-group">
-            <button data-action="edit" data-id="${charm.id}">Edit</button>
-            <button data-action="delete" data-id="${charm.id}" class="delete-btn">Delete</button>
+            <button data-action="edit" data-id="${charm.id}">수정</button>
+            <button data-action="delete" data-id="${charm.id}" class="delete-btn">삭제</button>
         </div>`;
 
     const createEditHTML = (charm) => {
@@ -114,8 +235,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <img src="head.png" alt="Armor Slot Icon"> <select data-type="armor-slots">${armorOptions}</select>
             </div>
             <div class="list-group actions-group">
-                <button data-action="save" data-id="${charm.id}">Save</button>
-                <button data-action="cancel" data-id="${charm.id}">Cancel</button>
+                <button data-action="save" data-id="${charm.id}">저장</button>
+                <button data-action="cancel" data-id="${charm.id}">취소</button>
             </div>`;
     };
 
@@ -135,20 +256,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 <select id="search-armor-slots">${armorOptions}</select>
             </div>
             <div class="list-group actions-group">
-                <button data-action="add" class="add-btn">Add Charm</button>
+                <button data-action="add" class="add-btn">추가</button>
             </div>
         `;
     };
     
     // ... all other HTML template functions are correct and unchanged from the previous version.
-    const createSkillEditGroupHTML = (id, name = '', level = 0, placeholder = '') => `
-        <div class="search-group skill-group">
-            <div class="input-wrapper">
-                <input type="text" id="input-${id}" placeholder="${placeholder}" value="${name}" autocomplete="off">
-                <div id="results-${id}" class="autocomplete-results hidden"></div>
-            </div>
-            <select id="level-${id}">${createLevelOptionsHTML(name, level)}</select>
-        </div>`;
+    const createSkillEditGroupHTML = (id, name = '', level = 0, placeholder = '') => {
+        // NEW: Check if it's a touch device to add the 'readonly' attribute.
+        const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        const readOnlyAttr = isTouch ? 'readonly' : '';
+        return `
+            <div class="search-group skill-group">
+                <div class="input-wrapper">
+                    <input type="text" id="input-${id}" placeholder="${placeholder}" value="${name}" autocomplete="off" ${readOnlyAttr}>
+                    <button class="clear-skill-btn" data-target-id="${id}">&times;</button>
+                    <div id="results-${id}" class="autocomplete-results hidden"></div>
+                </div>
+                <select id="level-${id}">${createLevelOptionsHTML(name, level)}</select>
+            </div>`;
+    }
 
     const createLevelOptionsHTML = (skillName, selectedLevel = 0) => {
         const skillInfo = SKILL_DATA[skillName];
@@ -163,6 +290,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // V. FILTERING & SEARCH LOGIC (Unchanged)
     // ===================================================================
     
+    // NEW Helper: Calculates a numerical "score" for a slot configuration
+    const getSlotScore = (slotsArray) => {
+        // e.g., [2, 1, 0] becomes 2 + 1 + 0 = 3
+        return slotsArray.reduce((sum, current) => sum + current, 0);
+    };
+
     const parseSlotString = (slotStr) => {
         if (!slotStr || slotStr === '-') return [0, 0, 0];
         const slots = slotStr.split('-').map(Number);
@@ -170,26 +303,33 @@ document.addEventListener('DOMContentLoaded', () => {
         return slots;
     };
     const slotsMeetOrExceed = (charmSlots, filterSlots) => {
-        // Sort both arrays descending to compare biggest slots first
         const sortedCharm = [...charmSlots].sort((a, b) => b - a);
         const sortedFilter = [...filterSlots].sort((a, b) => b - a);
-        // Every required filter slot must be met or exceeded by a charm slot
-        for (let i = 0; i < sortedFilter.length; i++) {
-            if (sortedFilter[i] === 0) continue; // Don't need to check empty filter slots
-            if (sortedCharm[i] < sortedFilter[i]) {
-                return false; // Charm doesn't meet requirement
+
+        for (const requiredSlot of sortedFilter) {
+            if (requiredSlot === 0) continue; // No requirement
+            // Find the first available charm slot that can fit this required slot
+            const fittingSlotIndex = sortedCharm.findIndex(charmSlot => charmSlot >= requiredSlot);
+            
+            if (fittingSlotIndex === -1) {
+                return false; // No fitting slot found for this requirement
+            }
+            // "Use up" this charm slot so it can't be used again
+            sortedCharm.splice(fittingSlotIndex, 1);
+        }
+        return true; // All required slots were accommodated
+    };
+    const getSearchValues = () => {
+        const skills = [];
+        for (let i = 1; i <= 3; i++) {
+            const name = document.getElementById(`input-search-${i}`)?.value;
+            const level = parseInt(document.getElementById(`level-search-${i}`)?.value);
+            if (name) {
+                skills.push({ name, level });
             }
         }
-        return true;
-    };
-
-    const getSearchValues = () => {
         return {
-            skills: [
-                document.getElementById('input-search-1')?.value,
-                document.getElementById('input-search-2')?.value,
-                document.getElementById('input-search-3')?.value
-            ].filter(term => term && term.trim() !== ''),
+            skills,
             armorSlots: document.getElementById('search-armor-slots')?.value,
             weaponSlot: document.getElementById('search-weapon-slots')?.value
         };
@@ -203,23 +343,25 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!hasFilters) return charmsData;
         
         return charmsData.filter(charm => {
-            // 1. Skill Filtering (AND logic)
-            const charmSkills = charm.skills.map(s => s.name);
-            if (!filters.skills.every(term => charmSkills.includes(term))) return false;
+            // 1. Skill Filtering (with level check)
+            const skillMatch = filters.skills.every(filterSkill => 
+                charm.skills.some(charmSkill => 
+                    charmSkill.name === filterSkill.name && charmSkill.level >= filterSkill.level
+                )
+            );
+            if (!skillMatch) return false;
 
-            // 2. Slot Filtering (Now conditional)
+            // 2. Slot Filtering (with new logic)
             if (areSlotsIncludedInFilter) {
-                // Armor Slot Filtering
                 if (filters.armorSlots !== '-') {
-                    const charmArmorSlotString = charm.slots.slice(0, 3).filter(s => s > 0).join('-') || '-';
-                    if (charmArmorSlotString !== filters.armorSlots) return false;
-                } else if (charm.slots.slice(0, 3).some(s => s > 0)) return false;
-
-                // Weapon Slot Filtering
+                    const filterArmorSlots = filters.armorSlots.split('-').map(Number);
+                    if (!slotsMeetOrExceed(charm.slots.slice(0, 3), filterArmorSlots)) return false;
+                }
                 if (filters.weaponSlot !== '-') {
+                    const filterWeaponSlot = parseInt(filters.weaponSlot) || 0;
                     const charmWeaponSlot = charm.slots.slice(3).find(s => s > 0) || 0;
-                    if (String(charmWeaponSlot) !== filters.weaponSlot) return false;
-                } else if (charm.slots.slice(3).some(s => s > 0)) return false;
+                    if (charmWeaponSlot < filterWeaponSlot) return false;
+                }
             }
 
             return true;
@@ -242,6 +384,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // VI. CRUD & EVENT HANDLERS (Unchanged)
     // ===================================================================
 
+    // NEW: Delegated event listener for the "X" buttons
+    document.querySelector('.card').addEventListener('click', (e) => {
+        if (e.target.matches('.clear-skill-btn')) {
+            const targetId = e.target.dataset.targetId;
+            const inputEl = document.getElementById(`input-${targetId}`);
+            const levelEl = document.getElementById(`level-${targetId}`);
+            if (inputEl) inputEl.value = '';
+            if (levelEl) levelEl.innerHTML = '<option value="0">-</option>';
+            handleFilter(); // Re-filter after clearing
+        }
+    });
+
     // It correctly calls renderList() at the end.
     searchContainer.addEventListener('click', (e) => {
         const action = e.target.dataset.action;
@@ -255,15 +409,15 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
 
         if (values.skills.length === 0) {
-            return alert("Please select at least one skill to add a charm.");
+            return alert("호석을 추가하려면 적어도 하나의 스킬을 선택하세요.");
         }
 
         const newCharm = {
             id: Date.now(), // FIX: Use integer timestamp for a valid ID.
             skills: [
-                { name: values.skills[0] || '', level: values.skills[0] ? skillLevels[0] : 0 },
-                { name: values.skills[1] || '', level: values.skills[1] ? skillLevels[1] : 0 },
-                { name: values.skills[2] || '', level: values.skills[2] ? skillLevels[2] : 0 },
+                { name: values.skills[0]?.name || '', level: values.skills[0]?.level || 0 },
+                { name: values.skills[1]?.name || '', level: values.skills[1]?.level || 0 },
+                { name: values.skills[2]?.name || '', level: values.skills[2]?.level || 0 },
             ],
             slots: [
                 ...(parseSlotString(values.armorSlots)),
@@ -277,7 +431,6 @@ document.addEventListener('DOMContentLoaded', () => {
         searchContainer.innerHTML = createSearchBoxHTML();
         initializeSearchBoxAutocompletes();
         renderList(); // Re-render the full list
-        alert("Charm added successfully!");
     });
     
     listContainer.addEventListener('click', (e) => {
@@ -336,14 +489,19 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const initializeSearchBoxAutocompletes = () => {
         for (let i = 1; i <= 3; i++) {
-            const input = document.getElementById(`input-search-${i}`);
-            const results = document.getElementById(`results-search-${i}`);
-            const levelSelect = document.getElementById(`level-search-${i}`);
+            const id = `search-${i}`;
+            const input = document.getElementById(`input-${id}`);
+            const results = document.getElementById(`results-${id}`);
+            const levelSelect = document.getElementById(`level-${id}`);
+            
+            // FIX: Add event listener to the level select to trigger auto-filter
+            levelSelect.addEventListener('change', handleFilter);
+
             createAutocomplete(input, results, ALL_SKILLS, (skillName) => {
                 levelSelect.innerHTML = createLevelOptionsHTML(skillName, 0);
                 handleFilter();
-            });            
-            input.addEventListener('input', handleFilter); // This now correctly calls the wrapper.
+            });
+            input.addEventListener('input', handleFilter);
         }
         document.getElementById('search-armor-slots').addEventListener('change', handleFilter);
         document.getElementById('search-weapon-slots').addEventListener('change', handleFilter);
@@ -384,7 +542,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 resultsEl.classList.add('hidden');
             }
         };
-        inputEl.addEventListener('focus', () => render(inputEl.value));
+        inputEl.addEventListener('focus', () => {
+            // FIX: When one input is focused, close all OTHER dropdowns.
+            document.querySelectorAll('.autocomplete-results').forEach(el => {
+                if (el !== resultsEl) {
+                    el.classList.add('hidden');
+                }
+            });
+            render(inputEl.value);
+
+            // 3. NEW: Smart scroll for mobile devices
+            // Check if we are likely on a touch device to avoid this on desktops.
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            
+            if (isTouchDevice) {
+                // After a short delay to allow the keyboard to appear...
+                setTimeout(() => {
+                    // ...scroll the input element to the middle of the visible screen.
+                    inputEl.scrollIntoView({
+                        behavior: 'smooth', // For a nice, smooth scroll
+                        block: 'center',    // Vertically align to the center
+                    });
+                }, 300); // A 300ms delay is usually enough.
+            }
+        });       
+
         inputEl.addEventListener('input', () => render(inputEl.value));
     }
     
@@ -435,29 +617,29 @@ document.addEventListener('DOMContentLoaded', () => {
             renderList();
             csvInput.value = '';
             closeModal(); // Close modal on successful import
-            alert(`${newCharms.length} charm(s) imported successfully!`);
+            alert(`${newCharms.length}개의 호석을 성공적으로 가져왔습니다!`);
         } else {
-            alert('No valid charms found. Please check the CSV format.');
+            alert('유효한 호석을 찾을 수 없습니다. CSV 형식을 확인하세요.');
         }
     });
 
     // UPGRADED: Export now copies to clipboard
     exportClipboardBtn.addEventListener('click', () => {
-        if (charmsData.length === 0) return alert('No charms to export.');
+        if (charmsData.length === 0) return alert('내보낼 호석이 없습니다.');
         
         const csvContent = formatForCSV();
         console.log(navigator.clipboard)
         navigator.clipboard.writeText(csvContent).then(() => {
             // Success feedback
             const originalText = exportClipboardBtn.textContent;
-            exportClipboardBtn.textContent = 'Copied!';
+            exportClipboardBtn.textContent = '복사완료!';
             setTimeout(() => {
                 exportClipboardBtn.textContent = originalText;
             }, 2000);
         }).catch(err => {
             // Error feedback
             console.error('Failed to copy to clipboard:', err);
-            alert('Failed to copy to clipboard. Check browser permissions.');
+            alert('클립보드에 복사하는 데 실패했습니다. 브라우저 권한을 확인해 주세요.');
         });
     });
 
@@ -480,6 +662,11 @@ document.addEventListener('DOMContentLoaded', () => {
     autoFilterToggle.addEventListener('change', (e) => {
         isAutoFilterEnabled = e.target.checked;
         manualSearchBtn.classList.toggle('hidden', isAutoFilterEnabled);
+        
+        // FIX: If the user just RE-ENABLED auto-filter, run a search immediately.
+        if (isAutoFilterEnabled) {
+            handleFilter();
+        }
     });
     
     slotsFilterToggle.addEventListener('change', (e) => {
@@ -496,10 +683,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- NEW: Event Listener for Delete All Button ---
     deleteAllBtn.addEventListener('click', () => {
         if (charmsData.length === 0) {
-            return alert('There are no charms to delete.');
+            return alert('삭제할 호석이 없습니다.');
         }
 
-        if (confirm('Are you sure you want to delete ALL charms? This action cannot be undone.')) {
+        if (confirm('모든 호석을 삭제하시겠습니까? 이 작업은 취소할 수 없습니다.')) {
             charmsData = []; // Wipe the data array
             saveToLocalStorage(); // Persist the empty array
             renderList(); // Re-render the now-empty list
@@ -512,4 +699,9 @@ document.addEventListener('DOMContentLoaded', () => {
     renderList(); // Initial render
     initializeSearchBoxAutocompletes();
     setTheme(localStorage.getItem('theme') ?? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
+    
+    // FIX: Set the initial state of the UI controls to match the JS variables
+    autoFilterToggle.checked = isAutoFilterEnabled;
+    slotsFilterToggle.checked = areSlotsIncludedInFilter;
+    manualSearchBtn.classList.toggle('hidden', isAutoFilterEnabled);
 });

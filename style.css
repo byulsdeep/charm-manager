@@ -96,20 +96,104 @@ body.modal-open {
 
 /* --- 3. LAYOUT (MOBILE FIRST) --- */
 .charm-entry { display: flex; flex-wrap: wrap; gap: 0.75rem; padding: 0.5rem; align-items: center; }
+
 .search-group, .list-group { display: flex; align-items: center; gap: 0.5rem; }
+
 .skill-group, .slots-group { flex: 1 1 100%; }
 .slots-group { white-space: nowrap; }
 
 /* --- 4. FORM & AUTOCOMPLETE STYLES --- */
-.input-wrapper { position: relative; flex: 1 1 auto; }
-#search input[type="text"], #search select, .is-editing input[type="text"], .is-editing select {
-  box-sizing: border-box; width: 100%; padding: 0.5rem 2rem 0.5rem 0.75rem; font-size: 1rem;
-  background-color: var(--card-bg); color: var(--text-color); border: 1px solid var(--border-color); border-radius: 6px;
-  -webkit-appearance: none; appearance: none; background-image: var(--arrow-svg); background-repeat: no-repeat;
-  background-position: right 0.75rem center; background-size: 0.8em;
+.input-wrapper {
+  position: relative;
+  /* This wrapper will grow and shrink to fill available space */
+  flex: 1 1 150px; /* grow:1, shrink:1, basis:150px (healthy start) */
 }
-.skill-group select { flex: 0 0 70px; }
-.autocomplete-results { position: absolute; top: 100%; left: 0; width: 100%; max-height: 200px; overflow-y: auto; z-index: 1000; background-color: var(--card-bg); border: 1px solid var(--border-color); border-top: none; border-radius: 0 0 6px 6px; box-shadow: 0 4px 8px var(--shadow-color); }
+
+.clear-skill-btn {
+    position: absolute;
+    /* FIX: Anchor the button to the right edge. 'em' units are best for scaling with font size. */
+    right: 1em; 
+    top: 50%;
+    transform: translateY(-50%);
+    background: none; border: none;
+    color: var(--border-color); font-size: 1.5rem; cursor: pointer;
+    padding: 0 0.5rem; line-height: 1;
+    z-index: 5;
+}
+.clear-skill-btn:hover { color: var(--text-color); }
+
+/* --- Shared Input & Select Styles --- */
+#search input[type="text"], #search select,
+.is-editing input[type="text"], .is-editing select {
+  box-sizing: border-box; 
+  width: 100%; 
+  padding: 0.5rem; font-size: 1rem;
+  background-color: var(--card-bg); color: var(--text-color);
+  border: 1px solid var(--border-color); border-radius: 6px;
+  -webkit-appearance: none; appearance: none;
+}
+
+/* --- C. Specific Sizing and Spacing --- */
+
+/* Skill Name Input: Needs space for clear button AND arrow */
+.input-wrapper input[type="text"] {
+  padding-right: 4em; /* Make space for X and arrow */
+  background-image: var(--arrow-svg);
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 0.8em;
+}
+select {
+  padding-right: 2em; /* Make space for arrow */
+  background-image: var(--arrow-svg);
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 0.8em;
+}
+
+/* --- Specific Sizing Using Flexbox --- */
+/* Skill Level: Don't grow, don't shrink, fixed width */
+.skill-group select {
+  flex-basis: 80px; /* Wider base for touch */
+  position: relative;
+  z-index: 10;
+}
+.slots-group select {
+  /* flex-grow: 1; */
+  /* min-width: 80px; */
+}
+/* Armor Slots: Don't grow, but CAN shrink from its ideal width */
+select[id*="armor-slots"], select[data-type="armor-slots"] {
+  /* flex: 0 1 110px; */
+  /* min-width: 5em; */
+}
+/* Weapon Slots: TIGHT */
+select[id*="weapon-slots"], select[data-type="weapon-slots"] {
+  flex: 0 0 65px;
+}
+
+.autocomplete-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+  
+  /* 
+    THESE ARE THE TWO NEW PROPERTIES THAT FIX THE PROBLEM
+  */
+  -webkit-overflow-scrolling: touch; /* 1. Enables smooth, momentum-based scrolling on iOS */
+  touch-action: pan-y;             /* 2. Tells the browser that touch gestures on this element are for vertical scrolling */
+
+  /* The rest of the styling is the same */
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    box-shadow: 0 4px 8px var(--shadow-color);
+}
 .autocomplete-results.hidden { display: none; }
 .autocomplete-results div { padding: 0.75rem 1rem; cursor: pointer; color: var(--text-color); }
 .autocomplete-results div:hover, .autocomplete-results div.active { background-color: var(--link-color); color: white; }
@@ -163,12 +247,26 @@ html.dark button.secondary-btn:hover {
 }
 
 /* --- 5. LIST ITEM STYLES --- */
-#list-header { font-size: 0.9em; opacity: 0.7; border-bottom: 2px solid var(--border-color); }
+/* NEW: Hide the list header by default on mobile */
+#list-header { display: none; }
 .list-item { border-top: 1px solid var(--border-color); }
-.list-group { flex: 1 1 100%; }
+/*
+   NEW RULE: This is the fix.
+   It targets every direct child that is a .list-group inside a .list-item
+   and forces it to take up the full width, creating the desired line breaks.
+*/
+.list-item > .list-group { flex-basis: 100%; }
+
+
+.list-group { font-size: 1rem; }
 .list-group span { opacity: 0.8; margin-right: 0.5em; }
 .list-group strong { font-weight: bold; }
-.actions-group { flex-grow: 0; justify-content: flex-end; }
+
+.actions-group {
+    flex: 1 1 100%; 
+    justify-content: flex-start; /* Changed from flex-end */
+    display: flex;
+}
 .actions-group button { margin-left: 0.5rem; }
 .actions-group button.add-btn {
     background-color: #28a745; /* A green color */
@@ -177,9 +275,29 @@ html.dark button.secondary-btn:hover {
 .is-editing { background-color: rgba(0, 123, 255, 0.1); }
 html.dark .is-editing { background-color: rgba(10, 132, 255, 0.15); }
 
+#level-search-1, #level-search-2, #level-search-3, #search-weapon-slots {
+  flex: 0 0 3em;
+}
 /* --- 6. TABLET & PC LAYOUT --- */
-@media (min-width: 992px) {
-  .charm-entry { display: grid; grid-template-columns: 2fr 2fr 2fr 1.5fr auto; flex-wrap: nowrap; gap: 1rem; padding: 0.75rem; }
-  .skill-group, .slots-group, .list-group { flex-basis: auto; justify-content: flex-start; }
-  .list-group.actions-group { justify-content: center; }
+@media (min-width: 1300px) {
+  #list-header { display: grid; }
+  .charm-entry {
+    display: grid;
+    /* FIX: The last column ('auto') is replaced with a fixed width (e.g., 140px) */
+    /* This forces the header and list item action columns to be identical. */
+    grid-template-columns: 1fr 1fr 1fr 1fr 160px;
+    /* flex-wrap: nowrap; */
+    gap: 1rem;
+    /* padding: 0.75rem; */
+    /* NEW: Vertically align content in each row for better visual consistency */
+    align-items: center; 
+  }
+  
+  .skill-group, .slots-group, .list-group {
+    flex-basis: auto;
+    justify-content: flex-start;
+  }
+  .list-group.actions-group {
+    justify-content: center;
+  }
 }
