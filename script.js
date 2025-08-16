@@ -489,7 +489,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ===================================================================
-    // VI. AUTOCOMPLETE LOGIC (FINAL ENHANCEMENT)
+    // VI. AUTOCOMPLETE LOGIC (FINAL FIX)
     // ===================================================================
     
     const initializeSearchBoxAutocompletes = () => {
@@ -528,8 +528,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function createAutocomplete(inputEl, resultsEl, skillsArray, onSkillSelect) {
-        let activeIndex = -1; // Keep track of the highlighted item
-        
+        let activeIndex = -1;
+        let lastCommittedValue = inputEl.value;
+
         // NEW HELPER: Updates the visual highlight on dropdown items
         const updateActiveItem = (items) => {
             items.forEach(item => item.classList.remove('active'));
@@ -547,14 +548,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const render = (query = '') => {
             resultsEl.innerHTML = '';
-            activeIndex = -1; // Reset index whenever the list is re-rendered
-            const filtered = skillsArray.filter(s => s.toLowerCase().includes(query.toLowerCase()));
-            if (filtered.length > 0) {
-                filtered.forEach(skill => {
+            activeIndex = -1;
+            const filteredSkills = skillsArray.filter(s => s.toLowerCase().includes(query.toLowerCase()));
+
+            if (filteredSkills.length > 0) {
+                filteredSkills.forEach(skill => {
                     const item = document.createElement('div');
                     item.textContent = skill;
                     item.addEventListener('mousedown', () => {
                         inputEl.value = skill;
+                        lastCommittedValue = skill; // Update on click
                         resultsEl.classList.add('hidden');
                         if (onSkillSelect) onSkillSelect(skill);
                     });
@@ -637,16 +640,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const perfectMatch = ALL_SKILLS.find(skill => skill.toLowerCase() === currentText.toLowerCase());
 
             if (perfectMatch) {
-                // If there's a perfect match, normalize the capitalization
-                // and trigger the callback to populate the level select.
-                inputEl.value = perfectMatch;
-                if (onSkillSelect) {
-                    onSkillSelect(perfectMatch);
+                if (perfectMatch !== lastCommittedValue) {
+                    inputEl.value = perfectMatch;
+                    lastCommittedValue = perfectMatch;
+                    if (onSkillSelect) onSkillSelect(perfectMatch);
+                    
                 }
+            } else {
+                inputEl.value = lastCommittedValue;
             }
             
-            // After a very short delay, hide the results. The delay prevents the dropdown
-            // from disappearing before a click on a result item can be registered.
             setTimeout(() => {
                 resultsEl.classList.add('hidden');
             }, 150);
