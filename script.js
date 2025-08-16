@@ -668,11 +668,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isAutoFilterEnabled) {
             handleFilter();
         }
+        localStorage.setItem('isAutoFilterEnabled', isAutoFilterEnabled);
     });
     
     slotsFilterToggle.addEventListener('change', (e) => {
         areSlotsIncludedInFilter = e.target.checked;
         handleFilter(); // Re-filter immediately when this changes
+        localStorage.setItem('areSlotsIncludedInFilter', areSlotsIncludedInFilter);
     });
     
     manualSearchBtn.addEventListener('click', () => {
@@ -701,7 +703,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeSearchBoxAutocompletes();
     setTheme(localStorage.getItem('theme') ?? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
     
-    // FIX: Set the initial state of the UI controls to match the JS variables
+    isAutoFilterEnabled = localStorage.getItem('isAutoFilterEnabled') === 'true';
+    areSlotsIncludedInFilter = localStorage.getItem('areSlotsIncludedInFilter') === 'true';
+ 
+
     autoFilterToggle.checked = isAutoFilterEnabled;
     slotsFilterToggle.checked = areSlotsIncludedInFilter;
     manualSearchBtn.classList.toggle('hidden', isAutoFilterEnabled);
