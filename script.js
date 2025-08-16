@@ -264,8 +264,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // ... all other HTML template functions are correct and unchanged from the previous version.
     const createSkillEditGroupHTML = (id, name = '', level = 0, placeholder = '') => {
         // NEW: Check if it's a touch device to add the 'readonly' attribute.
-        const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-        const readOnlyAttr = isTouch ? 'readonly' : '';
+        const isMobile = ('ontouchstart' in window || navigator.maxTouchPoints > 0) && window.innerWidth < 1300;
+        const readOnlyAttr = isMobile ? 'readonly' : '';
+
         return `
             <div class="search-group skill-group">
                 <div class="input-wrapper">
