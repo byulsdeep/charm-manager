@@ -571,6 +571,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const items = resultsEl.querySelectorAll('div');
             if (resultsEl.classList.contains('hidden') || items.length === 0) return;
 
+            if (e.key === 'Tab') {
+                resultsEl.classList.add('hidden'); // Close the dropdown
+                return; // Stop processing so the default Tab behavior can continue
+            }
+
+            // The existing logic for Arrow keys, Enter, and Escape
+            if (items.length === 0) return;
             if (e.key === 'ArrowDown') {
                 e.preventDefault(); // Prevent cursor from moving in the input
                 activeIndex = (activeIndex + 1) % items.length;
