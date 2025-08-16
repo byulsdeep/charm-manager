@@ -153,6 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const importModal = document.getElementById('import-modal');
     const closeModalBtn = document.getElementById('close-modal-btn');
     const importCsvBtn = document.getElementById('import-csv-btn');
+    const charmCountDisplay = document.getElementById('charm-count-display');
 
     // ===================================================================
     // II. NEW: MODAL FUNCTIONS
@@ -176,10 +177,12 @@ document.addEventListener('DOMContentLoaded', () => {
     /** Main function to render the list. It re-filters the data every time. */
     const renderList = () => {
         const filteredCharms = getFilteredCharms();
-        console.log(filteredCharms)
         // NEW: Create a reversed copy for LIFO (stack) display order.
         // The original charmsData array is NOT mutated.
         const charmsToDisplay = [...filteredCharms].reverse();
+
+        // ADDITION 1: Update the charm count display
+        charmCountDisplay.textContent = `(${filteredCharms.length} / ${charmsData.length})`;
 
         listContainer.innerHTML = '';
         charmsToDisplay.forEach(charm => {
@@ -264,14 +267,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // ... all other HTML template functions are correct and unchanged from the previous version.
     const createSkillEditGroupHTML = (id, name = '', level = 0, placeholder = '') => {
         // NEW: Check if it's a touch device to add the 'readonly' attribute.
-        const isMobile = ('ontouchstart' in window || navigator.maxTouchPoints > 0) && window.innerWidth < 1300;
+        const isMobile = ('ontouchstart' in window || navigator.maxTouchPoints > 0) && window.innerWidth < 768;
         const readOnlyAttr = isMobile ? 'readonly' : '';
 
         return `
             <div class="search-group skill-group">
                 <div class="input-wrapper">
                     <input type="text" id="input-${id}" placeholder="${placeholder}" value="${name}" autocomplete="off" ${readOnlyAttr}>
-                    <button class="clear-skill-btn" data-target-id="${id}">&times;</button>
+                    <!-- ADDITION 2: Add tabindex="-1" to the clear button -->
+                    <button class="clear-skill-btn" data-target-id="${id}" tabindex="-1">&times;</button>
                     <div id="results-${id}" class="autocomplete-results hidden"></div>
                 </div>
                 <select id="level-${id}">${createLevelOptionsHTML(name, level)}</select>
@@ -485,7 +489,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ===================================================================
-    // VII. AUTOCOMPLETE LOGIC (Unchanged)
+    // VI. AUTOCOMPLETE LOGIC (FIXED)
     // ===================================================================
     
     const initializeSearchBoxAutocompletes = () => {
@@ -524,8 +528,26 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function createAutocomplete(inputEl, resultsEl, skillsArray, onSkillSelect) {
+        let activeIndex = -1; // Keep track of the highlighted item
+        
+        // NEW HELPER: Updates the visual highlight on dropdown items
+        const updateActiveItem = (items) => {
+            items.forEach(item => item.classList.remove('active'));
+            if (activeIndex > -1) {
+                const activeItem = items[activeIndex];
+                activeItem.classList.add('active');
+                
+                // NEW: Scroll the new active item into the visible area of the dropdown.
+                activeItem.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest' // 'nearest' is less jarring than 'center' for this
+                });
+            }
+        };
+
         const render = (query = '') => {
             resultsEl.innerHTML = '';
+            activeIndex = -1; // Reset index whenever the list is re-rendered
             const filtered = skillsArray.filter(s => s.toLowerCase().includes(query.toLowerCase()));
             if (filtered.length > 0) {
                 filtered.forEach(skill => {
@@ -543,6 +565,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 resultsEl.classList.add('hidden');
             }
         };
+
+        // ADDITION 3: Add a keydown listener for arrow keys and Enter
+        inputEl.addEventListener('keydown', (e) => {
+            const items = resultsEl.querySelectorAll('div');
+            if (resultsEl.classList.contains('hidden') || items.length === 0) return;
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault(); // Prevent cursor from moving in the input
+                activeIndex = (activeIndex + 1) % items.length;
+                updateActiveItem(items);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault(); // Prevent cursor from moving in the input
+                activeIndex = (activeIndex - 1 + items.length) % items.length;
+                updateActiveItem(items);
+            } else if (e.key === 'Enter') {
+                if (activeIndex > -1) {
+                    e.preventDefault(); // Prevent form submission if it's ever in a form
+                    items[activeIndex].dispatchEvent(new Event('mousedown'));
+                }
+            } else if (e.key === 'Escape') {
+                resultsEl.classList.add('hidden');
+            }
+        });
+
         inputEl.addEventListener('focus', () => {
             // FIX: When one input is focused, close all OTHER dropdowns.
             document.querySelectorAll('.autocomplete-results').forEach(el => {

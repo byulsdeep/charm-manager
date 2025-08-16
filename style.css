@@ -278,6 +278,17 @@ html.dark .is-editing { background-color: rgba(10, 132, 255, 0.15); }
 #level-search-1, #level-search-2, #level-search-3, #search-weapon-slots {
   flex: 0 0 3em;
 }
+.list-title-container {
+  display: flex;
+    justify-content: space-between; /* Pushes items to opposite ends */
+    align-items: baseline; /* Aligns the text baselines nicely */
+    margin-top: 1.5rem; /* Add some space above it */
+}
+
+#charm-count-display {
+    font-size: 0.9em;
+    opacity: 0.7;
+}
 /* --- 6. TABLET & PC LAYOUT --- */
 @media (min-width: 1300px) {
   #list-header { display: grid; }
