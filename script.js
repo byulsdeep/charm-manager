@@ -489,7 +489,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ===================================================================
-    // VI. AUTOCOMPLETE LOGIC (FIXED)
+    // VI. AUTOCOMPLETE LOGIC (FINAL ENHANCEMENT)
     // ===================================================================
     
     const initializeSearchBoxAutocompletes = () => {
@@ -566,7 +566,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        // ADDITION 3: Add a keydown listener for arrow keys and Enter
+        // The keydown listener is correct and unchanged
         inputEl.addEventListener('keydown', (e) => {
             const items = resultsEl.querySelectorAll('div');
             if (resultsEl.classList.contains('hidden') || items.length === 0) return;
@@ -619,11 +619,41 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 }, 300); // A 300ms delay is usually enough.
             }
-        });       
+        });
 
+        // The input listener for typing is correct and unchanged
         inputEl.addEventListener('input', () => render(inputEl.value));
+
+        //
+        // THIS IS THE NEW, MINIMAL ADDITION
+        //
+        // Add a 'blur' event listener that fires when the user tabs or clicks away.
+        inputEl.addEventListener('blur', () => {
+            const currentText = inputEl.value;
+
+            // Check if the text typed by the user is an exact match for a valid skill.
+            // We use .find() on ALL_SKILLS to ensure case-insensitivity isn't a problem,
+            // although in our case, it's not strictly necessary.
+            const perfectMatch = ALL_SKILLS.find(skill => skill.toLowerCase() === currentText.toLowerCase());
+
+            if (perfectMatch) {
+                // If there's a perfect match, normalize the capitalization
+                // and trigger the callback to populate the level select.
+                inputEl.value = perfectMatch;
+                if (onSkillSelect) {
+                    onSkillSelect(perfectMatch);
+                }
+            }
+            
+            // After a very short delay, hide the results. The delay prevents the dropdown
+            // from disappearing before a click on a result item can be registered.
+            setTimeout(() => {
+                resultsEl.classList.add('hidden');
+            }, 150);
+        });
     }
-    
+        
+    // The global click listener for hiding dropdowns remains correct
     document.addEventListener('click', (e) => {
         if (!e.target.closest('.input-wrapper')) {
             document.querySelectorAll('.autocomplete-results').forEach(el => el.classList.add('hidden'));
