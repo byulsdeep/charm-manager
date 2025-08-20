@@ -135,6 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // NEW: State variables for filter controls
     let isAutoFilterEnabled = false;
     let areSlotsIncludedInFilter = false;
+    let isExactMatchEnabled = false;
     
     // UI Element References
     const searchContainer = document.getElementById('search');
@@ -146,6 +147,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const slotsFilterToggle = document.getElementById('slots-filter-toggle');
     const manualSearchBtn = document.getElementById('manual-search-btn');
     const clearFilterBtn = document.getElementById('clear-filter-btn');
+    const exactMatchToggle = document.getElementById('exact-match-toggle');
+
     const deleteAllBtn = document.getElementById('delete-all-btn');
 
     const importBtn = document.getElementById('import-btn');
@@ -292,7 +295,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return options;
     };
     // ===================================================================
-    // V. FILTERING & SEARCH LOGIC (Unchanged)
+    // IV. FILTERING & SEARCH LOGIC (UPGRADED)
     // ===================================================================
     
     // NEW Helper: Calculates a numerical "score" for a slot configuration
@@ -341,31 +344,54 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const getFilteredCharms = () => {
-        const filters = getSearchValues();        // Check if any filters are active AT ALL
+        const filters = getSearchValues();
         const hasFilters = filters.skills.length > 0 || 
                          (areSlotsIncludedInFilter && (filters.armorSlots !== '-' || filters.weaponSlot !== '-'));
 
         if (!hasFilters) return charmsData;
         
         return charmsData.filter(charm => {
-            // 1. Skill Filtering (with level check)
-            const skillMatch = filters.skills.every(filterSkill => 
-                charm.skills.some(charmSkill => 
-                    charmSkill.name === filterSkill.name && charmSkill.level >= filterSkill.level
-                )
-            );
+            // --- 1. Skill Filtering (Now respects the toggle) ---
+            const skillMatch = filters.skills.every(filterSkill => {
+                // If the filter level is 0, we only check for the skill's presence, not level
+                if (filterSkill.level === 0) {
+                    return charm.skills.some(charmSkill => charmSkill.name === filterSkill.name);
+                }
+                
+                // Otherwise, check with the appropriate logic
+                return charm.skills.some(charmSkill => 
+                    charmSkill.name === filterSkill.name && 
+                    (isExactMatchEnabled ? charmSkill.level === filterSkill.level : charmSkill.level >= filterSkill.level)
+                );
+            });
             if (!skillMatch) return false;
 
-            // 2. Slot Filtering (with new logic)
+            // --- 2. Slot Filtering (Now respects the toggle) ---
             if (areSlotsIncludedInFilter) {
+                // Armor Slot Filtering
                 if (filters.armorSlots !== '-') {
-                    const filterArmorSlots = filters.armorSlots.split('-').map(Number);
-                    if (!slotsMeetOrExceed(charm.slots.slice(0, 3), filterArmorSlots)) return false;
+                    const charmArmorSlotString = charm.slots.slice(0, 3).filter(s => s > 0).join('-') || '-';
+                    if (isExactMatchEnabled) {
+                        if (charmArmorSlotString !== filters.armorSlots) return false;
+                    } else {
+                        const filterArmorSlots = filters.armorSlots.split('-').map(Number);
+                        if (!slotsMeetOrExceed(charm.slots.slice(0, 3), filterArmorSlots)) return false;
+                    }
+                } else if (isExactMatchEnabled) { // For exact match, '-' must mean NO slots
+                    if (charm.slots.slice(0, 3).some(s => s > 0)) return false;
                 }
+
+                // Weapon Slot Filtering
                 if (filters.weaponSlot !== '-') {
-                    const filterWeaponSlot = parseInt(filters.weaponSlot) || 0;
                     const charmWeaponSlot = charm.slots.slice(3).find(s => s > 0) || 0;
-                    if (charmWeaponSlot < filterWeaponSlot) return false;
+                    if (isExactMatchEnabled) {
+                        if (String(charmWeaponSlot) !== filters.weaponSlot) return false;
+                    } else {
+                        const filterWeaponSlot = parseInt(filters.weaponSlot) || 0;
+                        if (charmWeaponSlot < filterWeaponSlot) return false;
+                    }
+                } else if (isExactMatchEnabled) { // For exact match, '-' must mean NO slot
+                    if (charm.slots.slice(3).some(s => s > 0)) return false;
                 }
             }
 
@@ -732,7 +758,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // ===================================================================
-    // IX. THEME & INITIALIZATION (Unchanged)
+    // IX. THEME & INITIALIZATION (with new listener and localStorage)
     // ===================================================================
     
     function setTheme(theme) {
@@ -782,6 +808,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // --- Add event listener for the new toggle ---
+    exactMatchToggle.addEventListener('change', (e) => {
+        isExactMatchEnabled = e.target.checked;
+        localStorage.setItem('isExactMatchEnabled', isExactMatchEnabled); // Save the setting
+        handleFilter(); // Re-filter immediately
+    });
+
     // --- App Initialization ---
     searchContainer.innerHTML = createSearchBoxHTML();
     loadFromLocalStorage();
@@ -791,9 +824,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     isAutoFilterEnabled = localStorage.getItem('isAutoFilterEnabled') === 'true';
     areSlotsIncludedInFilter = localStorage.getItem('areSlotsIncludedInFilter') === 'true';
- 
+    isExactMatchEnabled = localStorage.getItem('isExactMatchEnabled') === 'true'; // Load new setting
 
     autoFilterToggle.checked = isAutoFilterEnabled;
     slotsFilterToggle.checked = areSlotsIncludedInFilter;
+    exactMatchToggle.checked = isExactMatchEnabled; // Update new checkbox
     manualSearchBtn.classList.toggle('hidden', isAutoFilterEnabled);
 });
